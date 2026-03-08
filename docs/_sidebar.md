@@ -1,6 +1,6 @@
 * [Accueil](README.md)
 * [Analyse des données](data_analysis.md)
-* [Preprocessing](preprocessing.md)
+* [Prétraitement](preprocessing.md)
 * [Modélisation](modelisation.md)
 * [Résultats](results.md)
 * [Limitations](limitations.md)
