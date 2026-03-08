@@ -11,5 +11,5 @@ dependencies = [
     "pandas>=3.0.1",
     "ruff>=0.15.4",
     "seaborn>=0.13.2",
-    "umap",
+    "tabulate>=0.10.0",
 ]
