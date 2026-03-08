@@ -1,4 +1,4 @@
-* [Accueil](index.md)
+* [Accueil](README.md)
 * [Analyse des données](data_analysis.md)
 * [Preprocessing](preprocessing.md)
 * [Modélisation](modelisation.md)
