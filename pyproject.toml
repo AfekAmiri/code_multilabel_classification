@@ -13,3 +13,8 @@ dependencies = [
     "seaborn>=0.13.2",
     "tabulate>=0.10.0",
 ]
+
+[tool.uv.workspace]
+members = [
+    "cli",
+]

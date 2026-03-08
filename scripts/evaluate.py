@@ -1,4 +1,3 @@
-
 import os
 import numpy as np
 import pandas as pd
@@ -8,8 +7,8 @@ from utils.utils import load_data, extract_features_labels, compute_metrics, loa
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-def evaluate():
-	with open("config/model_configs.yaml", "r") as f:
+def evaluate(config_path="config/model_configs.yaml"):
+	with open(config_path, "r") as f:
 		configs = yaml.safe_load(f)
 	test_df, mlb = load_data(train=False)
 	results = []
