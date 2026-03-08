@@ -1,79 +1,96 @@
-import pickle
-import os
-from xml.parsers.expat import features, model
-import numpy as np
+import yaml
+import logging
+from utils.utils import load_data, extract_features_labels, compute_metrics
 from models.br_classifier import BRClassifier
 from models.cc_classifier import CCClassifier
 from models.dl_classifier import DLClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import cross_validate
-from sklearn.metrics import make_scorer, f1_score, precision_score, recall_score, classification_report
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
-
-def train_model(features, model_type, base_classifier='logistic', loss='bce', weights_path=None, dropout=0.2, focal_alpha=1, focal_gamma=2, hidden_dims=(256,128), embedding_dim=None, num_labels=None):
-    # Load dataset
-    with open(os.path.join('data', 'train_df.pkl'), 'rb') as f:
-        df = pickle.load(f)
-    
-    with open(os.path.join('data', 'mlb.pkl'), 'rb') as f:
-        mlb = pickle.load(f)
-
-    # Select features and labels
-    #X = np.vstack([df[col] for col in features]).T
-    #X = np.concatenate([np.stack(df[col].values) for col in features], axis=1)
-
-    feature_arrays = []
-    for col in features:
-        vals = df[col].values
-        if isinstance(vals[0], np.ndarray):  # Embedding column
-            feature_arrays.append(np.stack(vals))
-        else:  # Scalar column
-            feature_arrays.append(np.array(vals).reshape(-1, 1))
-
-    X = np.concatenate(feature_arrays, axis=1)
-    y = np.array(df['tags_encoded'].tolist())
-
-    # Model selection
-    if model_type == 'br':
-        base = LogisticRegression(max_iter=1000) if base_classifier == 'logistic' else None
-        model = BRClassifier(base_estimator=base)
-    elif model_type == 'cc':
-        base = LogisticRegression(max_iter=1000) if base_classifier == 'logistic' else None
-        model = CCClassifier(base_estimator=base)
-    elif model_type == 'dl':
+def select_model(
+    model_type,
+    base_classifier,
+    loss,
+    focal_alpha,
+    focal_gamma,
+    hidden_dims,
+    embedding_dim,
+    num_labels,
+    dropout,
+):
+    if model_type in ["br", "cc"]:
+        if base_classifier == "logistic":
+            base = LogisticRegression(max_iter=1000)
+            if model_type == "br":
+                model = BRClassifier(base_estimator=base)
+            else:
+                model = CCClassifier(base_estimator=base)
+        else:
+            model = BRClassifier() if model_type == "br" else CCClassifier()
+    elif model_type == "dl":
         model = DLClassifier(
-            embedding_dim=X.shape[1],
-            num_labels=y.shape[1],
+            embedding_dim=embedding_dim,
+            num_labels=num_labels,
             hidden_dims=hidden_dims,
             dropout=dropout,
             loss_type=loss,
             focal_alpha=focal_alpha,
-            focal_gamma=focal_gamma
+            focal_gamma=focal_gamma,
         )
     else:
-        raise ValueError('Unknown model type')
+        raise ValueError("Unknown model type")
+    return model
 
-    # Cross-validation
-    #cv_results = cross_validate(
-    #model, X, y,
-    #cv=5,
-    #scoring = {
-    #'accuracy': 'accuracy',
-    #'f1_weighted': make_scorer(f1_score, average='weighted', zero_division=0),
-    #'precision_weighted': make_scorer(precision_score, average='weighted', zero_division=0),
-    #'recall_weighted': make_scorer(recall_score, average='weighted', zero_division=0)
-    #},
-    #return_train_score=True)
 
-    #print("Train scores:", cv_results['train_accuracy'], cv_results['train_f1_weighted'], cv_results['train_recall_weighted'], cv_results['train_precision_weighted'])
-    #print("Validation scores:", cv_results['test_accuracy'], cv_results['test_f1_weighted'], cv_results['test_recall_weighted'], cv_results['test_precision_weighted'])
+def train_model(
+    features,
+    model_type,
+    base_classifier="logistic",
+    loss="bce",
+    weights_path=None,
+    dropout=0.2,
+    focal_alpha=1,
+    focal_gamma=2,
+    hidden_dims=(256, 128),
+    embedding_dim=None,
+    num_labels=None,
+    num_epochs=500,
+    lr=1e-3,
+):
+    # Load dataset
+    df, mlb = load_data(train=True)
 
-    # Fit final model on all data
-    model.fit(X, y)
+    # Select features and labels
+    X, y = extract_features_labels(df, features)
+
+    # Select model
+    model = select_model(
+        model_type,
+        base_classifier,
+        loss,
+        focal_alpha,
+        focal_gamma,
+        hidden_dims,
+        X.shape[1],
+        y.shape[1],
+        dropout,
+    )
+
+    # Fit model
+    if model_type == "dl":
+        model.fit(X, y, num_epochs=num_epochs, lr=lr)
+    else:
+        model.fit(X, y)
+
+    # Evaluate on training set
     y_pred = model.predict(X)
-    tag_names = mlb.classes_
-    print(classification_report(y, y_pred, target_names=tag_names, zero_division=0))
+    acc, f1, prec, rec, report = compute_metrics(y, y_pred, mlb)
+    logging.info("Classification report:\n%s", report)
+    logging.info("Accuracy: %.4f | F1: %.4f | Precision: %.4f | Recall: %.4f", acc, f1, prec, rec)
 
     # Save weights
     if weights_path:
@@ -81,14 +98,24 @@ def train_model(features, model_type, base_classifier='logistic', loss='bce', we
 
     return model
 
-if __name__ == '__main__':
-    # Example usage
-    weights_path='models/checkpoints/dl_desc_code_input_500_weights.pkl'
-    model = train_model(
-        features=['prob_desc_description_embedding','prob_desc_input_spec_combined_embedding','source_code_embedding'],
-        model_type='dl',
-        base_classifier='logistic',
-        loss='bce',
-        weights_path=weights_path
-    )
-    print("Model trained and weights saved in ", weights_path)
+
+if __name__ == "__main__":
+    with open("config/model_configs.yaml", "r") as f:
+        configs = yaml.safe_load(f)
+
+    for model_cfg in configs["models"]:
+        model = train_model(
+            features=model_cfg["features"],
+            model_type=model_cfg["model_type"],
+            base_classifier=model_cfg.get("base_classifier", "logistic"),
+            loss=model_cfg.get("loss", "bce"),
+            weights_path=model_cfg["weights_path"],
+            hidden_dims=tuple(model_cfg.get("hidden_dims", (256, 128))),
+            dropout=model_cfg.get("dropout", 0.2),
+            num_epochs=model_cfg.get("num_epochs", 500),
+        )
+        logging.info(
+            "Trained %s and saved weights to %s",
+            model_cfg["name"],
+            model_cfg["weights_path"],
+        )

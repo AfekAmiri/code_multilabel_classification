@@ -1,0 +1,170 @@
+# Model training configs for reproducibility
+
+models:
+  - name: br_logistic_code
+    model_type: br
+    base_classifier: logistic
+    features:
+      - source_code_embedding
+    weights_path: models/checkpoints/br_logistic_code_weights.pkl
+
+  - name: br_logistic_desc_code_input_output_notes_difficulty
+    model_type: br
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+      - prob_desc_output_spec_combined_embedding
+      - prob_desc_notes_embedding
+      - difficulty
+    weights_path: models/checkpoints/br_logistic_desc_code_input_output_notes_difficulty_weights.pkl
+
+  - name: br_logistic_desc_code_input_output_notes
+    model_type: br
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+      - prob_desc_output_spec_combined_embedding
+      - prob_desc_notes_embedding
+    weights_path: models/checkpoints/br_logistic_desc_code_input_output_notes_weights.pkl
+
+  - name: br_logistic_desc_code_input_output
+    model_type: br
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+      - prob_desc_output_spec_combined_embedding
+    weights_path: models/checkpoints/br_logistic_desc_code_input_output_weights.pkl
+
+  - name: br_logistic_desc_code_input
+    model_type: br
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+    weights_path: models/checkpoints/br_logistic_desc_code_input_weights.pkl
+
+  - name: br_logistic_desc_code
+    model_type: br
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+    weights_path: models/checkpoints/br_logistic_desc_code_weights.pkl
+
+  - name: br_logistic_desc_input_output
+    model_type: br
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - prob_desc_input_spec_combined_embedding
+      - prob_desc_output_spec_combined_embedding
+    weights_path: models/checkpoints/br_logistic_desc_input_output_weights.pkl
+
+  - name: cc_logistic_code
+    model_type: cc
+    base_classifier: logistic
+    features:
+      - source_code_embedding
+    weights_path: models/checkpoints/cc_logistic_code_weights.pkl
+
+  - name: cc_logistic_desc_code_input_output_notes_difficulty
+    model_type: cc
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+      - prob_desc_output_spec_combined_embedding
+      - prob_desc_notes_embedding
+      - difficulty
+    weights_path: models/checkpoints/cc_logistic_desc_code_input_output_notes_difficulty_weights.pkl
+
+  - name: cc_logistic_desc_code_input_output_notes
+    model_type: cc
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+      - prob_desc_output_spec_combined_embedding
+      - prob_desc_notes_embedding
+    weights_path: models/checkpoints/cc_logistic_desc_code_input_output_notes_weights.pkl
+
+  - name: cc_logistic_desc_code_input_output
+    model_type: cc
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+      - prob_desc_output_spec_combined_embedding
+    weights_path: models/checkpoints/cc_logistic_desc_code_input_output_weights.pkl
+
+  - name: cc_logistic_desc_code_input
+    model_type: cc
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+    weights_path: models/checkpoints/cc_logistic_desc_code_input_weights.pkl
+
+  - name: cc_logistic_desc_code
+    model_type: cc
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+    weights_path: models/checkpoints/cc_logistic_desc_code_weights.pkl
+
+  - name: cc_logistic_desc_input_output
+    model_type: cc
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - prob_desc_input_spec_combined_embedding
+      - prob_desc_output_spec_combined_embedding
+    weights_path: models/checkpoints/cc_logistic_desc_input_output_weights.pkl
+
+  - name: cc_logistic_desc
+    model_type: cc
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+    weights_path: models/checkpoints/cc_logistic_desc_weights.pkl
+
+  - name: dl_desc_code_input_500
+    model_type: dl
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+    weights_path: models/checkpoints/dl_desc_code_input_500_weights.pkl
+    hidden_dims: [256, 128]
+    dropout: 0.2
+    loss: bce
+
+  - name: dl_desc_code_input
+    model_type: dl
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+    weights_path: models/checkpoints/dl_desc_code_input_weights.pkl
+    hidden_dims: [256, 128]
+    dropout: 0.2
+    loss: bce
+
+  - name: br_logistic_desc
+    model_type: br
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+    weights_path: models/checkpoints/br_logistic_desc_weights.pkl
