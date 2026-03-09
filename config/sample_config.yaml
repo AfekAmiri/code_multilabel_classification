@@ -1,0 +1,19 @@
+models:
+  - name: br_logistic_code
+    model_type: br
+    base_classifier: logistic
+    features:
+      - source_code_embedding
+    weights_path: models/checkpoints/br_logistic_code_weights.pkl
+
+  - name: br_logistic_desc_code_input_output_notes_difficulty
+    model_type: br
+    base_classifier: logistic
+    features:
+      - prob_desc_description_embedding
+      - source_code_embedding
+      - prob_desc_input_spec_combined_embedding
+      - prob_desc_output_spec_combined_embedding
+      - prob_desc_notes_embedding
+      - difficulty
+    weights_path: models/checkpoints/br_logistic_desc_code_input_output_notes_difficulty_weights.pkl
