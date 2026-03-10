@@ -73,10 +73,11 @@ def main():
             except Exception as e:
                 logging.error("Failed to load input sample: %s", e)
                 sys.exit(1)
-        y_pred, tags_pred, model_cfg = predict_with_model(args.model, input_sample)
+        y_pred, tags_pred, y_proba, model_cfg = predict_with_model(args.model, input_sample)
         logging.info("Predictions for model %s:", model_cfg['name'])
         logging.info("%s", y_pred)
         logging.info("Decoded tags: %s", tags_pred)
+        logging.info("Prediction probabilities: %s", y_proba)
 
 if __name__ == "__main__":
     main()

@@ -1,10 +1,16 @@
 import pickle
+import torch
 import os
 import numpy as np
+from transformers import AutoTokenizer, AutoModel
 from models.br_classifier import BRClassifier
 from models.cc_classifier import CCClassifier
 from models.dl_classifier import DLClassifier
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report
+
+
+tokenizer = AutoTokenizer.from_pretrained("microsoft/codebert-base")
+embedding_model = AutoModel.from_pretrained("microsoft/codebert-base")
 
 def load_data(train=True):
     if train:
@@ -52,3 +58,11 @@ def load_model(model_type, model_path, embedding_dim, num_labels):
 	else:
 		raise ValueError(f"Unknown model type: {model_type}")
 	return model
+
+def embed(text):
+    inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=512)
+    # tokens = tokenizer.tokenize(text)
+    # token_ids = inputs["input_ids"][0].tolist()
+    with torch.no_grad():
+        embeddings = embedding_model(**inputs).last_hidden_state.squeeze(0)
+    return embeddings[0].numpy()  # [CLS] embedding

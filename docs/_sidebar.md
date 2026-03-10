@@ -1,5 +1,8 @@
 - Accueil
-  - [Présentation](README.md)
+  - [Accueil](README.md)
+
+- Objectif 
+  - [Objectif](metriques.md)
 
 - Analyse
   - [Analyse des données](data_analysis.md)

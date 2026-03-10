@@ -9,6 +9,11 @@
   - Améliore BR en utilisant la prédiction d’un label comme feature pour le suivant
   - Ordre des labels laissé par défaut (pas de randomisation)
 
+- **Base Estimator**
+  - Logistic Regression : C=1.0, penalty='l2'
+  - Equivalent à un perceptron à une seule couche avec une activation sigmoïd
+  - Résiste au sur-apprentissage (régularisation)
+
 - **Deep Learning (DL)**
   - Architecture :
     - Multi-Layer Perceptron (MLP)

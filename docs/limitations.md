@@ -7,7 +7,7 @@
 - Base_estimator :
   - Utilisation exclusive de LogisticRegression pour BR et CC
   - Pas d’optimisation des hyperparamètres
-  - Il aurait été pertinent de tester d’autres modèles (RandomForest, SVM, etc.) et d’optimiser avec GridSearch
+  - Il aurait été pertinent de tester d’autres modèles (RandomForest, SVM, etc.) et d’optimiser avec GridSearchCV
 
 - Modèle Deep Learning (DL) :
   - Peu d’expérimentations

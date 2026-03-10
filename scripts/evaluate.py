@@ -30,7 +30,14 @@ def evaluate(config_path="config/model_configs.yaml"):
 			'report': report
 		})
 	df_results = pd.DataFrame(results)
-	logging.info(df_results.sort_values('f1_weighted', ascending=False).to_markdown(index=False))
+	with open("docs/results.md", "w", encoding="utf-8") as f:
+		f.write("# Résultats des modèles\n\n")
+		f.write(df_results.drop(columns=['report']).sort_values('f1_weighted', ascending=False).to_markdown(index=False))
+		f.write("\n\n## Détails des métriques\n\n")
+		for idx, row in df_results.sort_values('f1_weighted', ascending=False).iterrows():
+			f.write(f"\n### {row['model']}\n\n")
+			f.write(row['report'])
+			f.write("\n\n")
 
 if __name__ == "__main__":
 	evaluate()
