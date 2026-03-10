@@ -1,0 +1,21 @@
+models:
+- name: dl_desc_code_input_focal
+  model_type: dl
+  features:
+    - prob_desc_description_embedding
+    - source_code_embedding
+    - prob_desc_input_spec_combined_embedding
+  weights_path: models/checkpoints/dl_desc_code_input_focal_weights.pkl
+  hidden_dims: [256, 128]
+  dropout: 0.2
+  loss: focal
+- name: dl_desc_code_input_bce
+  model_type: dl
+  features:
+    - prob_desc_description_embedding
+    - source_code_embedding
+    - prob_desc_input_spec_combined_embedding
+  weights_path: models/checkpoints/dl_desc_code_input_bce_weights.pkl
+  hidden_dims: [256, 128]
+  dropout: 0.2
+  loss: bce

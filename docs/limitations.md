@@ -11,8 +11,9 @@
 
 - Modèle Deep Learning (DL) :
   - Peu d’expérimentations
-  - Les modèles classiques ont donné de meilleures performances, donc moins d’exploration DL
+  - Les modèles classiques ont donné de bonnes performances, donc moins d’exploration DL
 
 - Fine-tuning CodeBERT :
   - Tentative de fine-tuning sur Colab
   - Problème : épuisement de la RAM, impossible de poursuivre l’expérimentation
+  - Trop complexe pour ce problème "simple"

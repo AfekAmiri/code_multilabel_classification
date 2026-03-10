@@ -1,3 +1,11 @@
+## Expériences
+
+- J'ai testé plusieurs combinaisons de features avec BR et CC.
+- Meilleur combinaison : description + code + input spec
+- J'ai testé quelques modèles de dl avec la meilleur combinaison en utilisant différents loss :
+    - BCE
+    - Weighted BCE
+    - Focal Loss
 ## Résultats des modèles
 
 | model   | features                                |   accuracy |   f1_weighted |   precision_weighted |   recall_weighted |
@@ -19,7 +27,12 @@
 | br      | desc,code,input,output,notes            |   0.341418 |      0.493573 |             0.611825 |          0.521021 |
 | dl      | desc,code,input                         |   0.401119 |      0.471686 |             0.654963 |          0.509009 |
 
+## Comparaison entre weighted BCE et focal loss
 
+| model   | features                                |   accuracy |   f1_weighted |   precision_weighted |   recall_weighted |
+|:--------|:----------------------------------------|-----------:|--------------:|---------------------:|------------------:|
+| dl_desc_code_input_focal | desc,code,input |   0.546642 |      0.712896 |             0.740194 |          0.71021  |
+| dl_desc_code_input_bce   | desc,code,input |   0.412313 |      0.705207 |             0.652143 |          0.782282 |
 
 ## Détails des métriques du meilleur modèle
 

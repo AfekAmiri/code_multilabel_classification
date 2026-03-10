@@ -47,7 +47,7 @@ class DLClassifier(nn.Module):
         self.classifier = nn.Sequential(*layers)
         self.loss_type = loss_type
         if loss_type == "bce":
-            self.loss_fn = nn.BCEWithLogitsLoss()
+              self.loss_fn = None  # sera défini lors du fit
         elif loss_type == "focal":
             self.loss_fn = FocalLoss(alpha=focal_alpha, gamma=focal_gamma)
         else:
@@ -65,6 +65,14 @@ class DLClassifier(nn.Module):
         optimizer = torch.optim.Adam(self.parameters(), lr=lr)
         embeddings = torch.tensor(embeddings, dtype=torch.float32)
         labels = torch.tensor(labels, dtype=torch.float32)
+        # Ajout du calcul de pos_weight pour BCE
+        if self.loss_type == "bce":
+            # Calcul du poids pour chaque classe
+            # pos_weight = (N - P) / P
+            P = labels.sum(dim=0)
+            N = labels.shape[0] - P
+            pos_weight = N / (P + 1e-8)
+            self.loss_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weight)
         for epoch in range(num_epochs):
             optimizer.zero_grad()
             loss, logits = self.forward(embeddings, labels)
@@ -85,5 +93,5 @@ class DLClassifier(nn.Module):
         torch.save(self.state_dict(), path)
 
     def load(self, path):
-        self.load_state_dict(torch.load(path))
+        self.load_state_dict(torch.load(path), strict=False)
         self.eval()

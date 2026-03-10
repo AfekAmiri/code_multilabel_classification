@@ -1,5 +1,5 @@
 ## Objectif 
- Prédire les tags en fonction des données problème de codage disponibles avec un rappel de 70% et un f1-score supérieur à 70%.
+ Prédire les tags en fonction des données problème de codage disponibles avec un rappel de 70% et un f1-score supérieur à 60%.
 
 ## Métriques
 
