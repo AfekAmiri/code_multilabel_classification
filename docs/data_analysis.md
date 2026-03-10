@@ -16,7 +16,9 @@
     ![Distribution des tags filtrés](_assets/images/filtered_tags_distribution.png)
 - **Lignes et colonnes :** (4982, 21) et après filtrage des tags (2678, 21) divisés en 80% train et 20% test.
 - **Types de variables :** 17 qualitatives, 3 quantitatives
+
     ![Types de data](_assets/images/datatypes.png)
+    
 - **Analyse des valeurs manquantes :**
     - `hidden_unit_tests` est toujours vide
     - `prob_desc_notes` : 27% de valeurs manquantes
