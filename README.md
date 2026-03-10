@@ -57,7 +57,7 @@ Model and training parameters are defined in YAML files under `config/`.
 
 See the `docs/` directory or GitHub Pages for detailed guides and results.
 
-## Professional Notes
+## Notes
 
 - Keep your environment isolated using virtual environments.
 - Always specify correct paths for config and data files.
