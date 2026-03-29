@@ -1,4 +1,4 @@
-# tech_challenge_illuin_technology
+# code_multilabel_classification
 
 ## Project Structure
 
