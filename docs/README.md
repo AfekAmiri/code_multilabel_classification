@@ -1,5 +1,5 @@
 # Accueil
-Bienvenue sur la documentation du projet Illuin Technology Challenge.
+Bienvenue sur la documentation du projet multi-label classification de codes.
 
 # Navigation
 
